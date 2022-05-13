@@ -1,0 +1,271 @@
+extends ./base
+
+block style
+  style.
+    .cube {
+      margin-top: 15px;
+      margin-bottom: 15px;
+      height: 50px;
+      width: 100%;
+    }
+
+    .btn-first {
+      color: #ffffff;
+      background-color: #46a;
+      border-color: #46a;
+    }
+
+    .btn-first:hover {
+      color: #ffffff!important;
+      background-color: #46a!important;
+      border-color: #46a!important;
+    }
+
+    .btn-first:active {
+      color: #ffffff!important;
+      background-color: #46a!important;
+      border-color: #46a!important;
+    }
+
+    .btn-first:focus {
+      box-shadow: none!important;
+    }
+
+    .btn-second {
+      color: #fff;
+      background-color: #359;
+      border-color: #359;
+    }
+
+    .btn-second:hover {
+      color: #fff;
+      background-color: #359;
+      border-color: #359;
+    }
+
+    .btn-second:active {
+      color: #fff;
+      background-color: #359;
+      border-color: #359;
+    }
+
+    .btn-second:focus {
+      box-shadow: none!important;
+    }
+
+block content
+  .container-fluid(style='background-color: darkgrey;')
+    .container-fluid
+      .row.justify-content-center
+        .col-10.pt-3.pb-2
+          h3.text-center 1 to 50
+          .position-absolute(style='top: 50%; right: -3%; transform: translate(-50%, -50%);')
+            button(type='button').btn.btn-danger#reset Reset
+      .row.justify-content-center
+        .col-10.pt-2.pb-2
+          h4.d-inline#counter Counter: 
+            span#currentCounter
+          h4.d-inline.float-right#nextNumber Next Number: 
+            span#currentNumber
+    .col-12#grid
+      .row.justify-content-center
+        h3.position-absolute#yourTime(style='display: none; top: 45%;') Your Time: 
+          span#score
+      .row.justify-content-center#r1
+        .col-2
+          button(type="button").btn.btn-first.cube#c1
+        .col-2
+          button(type="button").btn.btn-first.cube#c2
+        .col-2
+          button(type="button").btn.btn-first.cube#c3
+        .col-2
+          button(type="button").btn.btn-first.cube#c4
+        .col-2
+          button(type="button").btn.btn-first.cube#c5
+      .row.justify-content-center#r2
+        .col-2
+          button(type="button").btn.btn-first.cube#c6
+        .col-2
+          button(type="button").btn.btn-first.cube#c7
+        .col-2
+          button(type="button").btn.btn-first.cube#c8
+        .col-2
+          button(type="button").btn.btn-first.cube#c9
+        .col-2
+          button(type="button").btn.btn-first.cube#c10
+      .row.justify-content-center#r3
+        .col-2
+          button(type="button").btn.btn-first.cube#c11
+        .col-2
+          button(type="button").btn.btn-first.cube#c12
+        .col-2
+          button(type="button").btn.btn-first.cube#c13
+        .col-2
+          button(type="button").btn.btn-first.cube#c14
+        .col-2
+          button(type="button").btn.btn-first.cube#c15
+      .row.justify-content-center#r4
+        .col-2
+          button(type="button").btn.btn-first.cube#c16
+        .col-2
+          button(type="button").btn.btn-first.cube#c17
+        .col-2
+          button(type="button").btn.btn-first.cube#c18
+        .col-2
+          button(type="button").btn.btn-first.cube#c19
+        .col-2
+          button(type="button").btn.btn-first.cube#c20
+      .row.justify-content-center#r5
+        .col-2
+          button(type="button").btn.btn-first.cube#c21
+        .col-2
+          button(type="button").btn.btn-first.cube#c22
+        .col-2
+          button(type="button").btn.btn-first.cube#c23
+        .col-2
+          button(type="button").btn.btn-first.cube#c24
+        .col-2
+          button(type="button").btn.btn-first.cube#c25
+    .container-fluid
+      .row.justify-content-center
+        .col-10.pt-3.pb-2
+          .text-center
+            a(href='https://github.com/imranwijaya/expressjs-puzzle-game-1to50-demo' style='color: black;').text-center Github Link
+
+block script
+  script(type='text/javascript').
+    $(function () {
+      var list = [
+        1,2,3,4,5,6,7,8,9,10,
+        11,12,13,14,15,16,17,18,19,20,
+        21,22,23,24,25,26,27,28,29,30,
+        31,32,33,34,35,36,37,38,39,40,
+        41,42,43,44,45,46,47,48,49,50
+      ]; // Array list 1-50
+
+      var counter; // variable for counter interval
+      var currentTime, currentNumber;
+      var middleIndex, firstHalfIndex, secondHalfIndex;
+      var firstHalf, secondHalf;
+
+      // Init cube
+      function init() {
+        currentTime = 0.000; // set currentTime
+        currentNumber = 1 // set value for first number to click
+
+        $('#currentNumber').text(currentNumber);
+        $('#currentCounter').text(currentTime);
+        $('#nextNumber').css('visibility', 'visible');
+        $('#counter').css('visibility', 'visible');
+        $('#yourTime').css('display', 'none');
+
+        middleIndex = Math.ceil(list.length / 2);
+
+        firstHalf = list.slice().splice(0, middleIndex); // keep the original array
+        secondHalf = list.slice().splice(-middleIndex); // keep the original array
+        
+        firstHalfIndex = firstHalf.length; // first half index to reduced
+        secondHalfIndex = secondHalf.length; // second half index to reduced
+
+        shuffleCubes();
+      }
+
+      // Run on document.ready
+      init();
+
+      // Reset all variable and state, re-shuffle cube
+      function reset() {
+        init();
+        $('#grid').children().each(function () {
+          var e = $(this);
+          //- console.log(e);
+          e.children().each(function () {
+            var child = $(this).children().eq(0);
+            child.css('visibility', 'visible');
+            if (child.hasClass('btn-second')) {
+              child.removeClass('btn-second');
+              child.addClass('btn-first');
+            }
+          })
+        })
+      }
+
+      // Shuffle cubes on document ready
+      function shuffleCubes() {
+        let randomIndex;
+        while(firstHalfIndex !== 0) {
+          randomIndex = Math.floor(Math.random() * firstHalfIndex);
+          firstHalfIndex--;
+          var singleArray = firstHalf.splice(randomIndex, 1);
+          $(`#c${firstHalfIndex+1}`).text(singleArray[0]);
+        }
+      }
+
+      // Shuffle next value when button clicked inside cube
+      function shuffleNextCube() {
+        if (secondHalfIndex !== 0) {
+          let randomIndex;
+          randomIndex = Math.floor(Math.random() * secondHalfIndex);
+          secondHalfIndex--;
+          var singleArray = secondHalf.splice(randomIndex, 1);
+          return singleArray[0];
+        } else {
+          return null;
+        }
+      }
+
+      // Start interval (counter)
+      function startInterval() {
+        counter = setInterval(function () {
+          if (currentTime === 0) {
+            $('#currentCounter').text('0');
+          } else {
+            var elapsedTime = Date.now() - currentTime;
+            var time = elapsedTime / 1000;
+            $('#currentCounter').text(time.toFixed(3));
+          }
+        });
+      }
+
+      // Stop interval (counter)
+      function stopInterval() {
+        clearInterval(counter);
+      }
+
+      $('button.cube').on('click', function () {
+        var cubeNumber = Number($(this).text());
+        if (currentNumber === cubeNumber) {
+          //- Start Counter
+          if (currentNumber === 1) {
+            currentTime = Date.now();
+            startInterval();
+          }
+
+          currentNumber++;
+          $('#currentNumber').text(currentNumber);
+
+          var nextShuffle = shuffleNextCube();
+          if (nextShuffle !== null) {
+            $(this).removeClass('btn-first');
+            $(this).addClass('btn-second');
+            $(this).text(nextShuffle);
+          } else {
+            $(this).css('visibility', 'hidden');
+          }
+
+          //- Stop Counter
+          if (currentNumber === 51) {
+            $('#nextNumber').css('visibility', 'hidden');
+            stopInterval();
+            var score = $('#currentCounter').text();
+            $('#counter').css('visibility', 'hidden');
+            $('#score').text(score);
+            $('#yourTime').css('display', 'block');
+          }
+        }
+      })
+
+      $('#reset').click(function () {
+        reset();
+      })
+    })

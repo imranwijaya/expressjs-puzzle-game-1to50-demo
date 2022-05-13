@@ -1,0 +1,27 @@
+{
+  "name": "expressjs-puzzle-game-1to50-demo",
+  "version": "1.0.0",
+  "description": "puzzle game Quickness Test! 1 to 50 demo app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Imran Wijaya",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imranwijaya/expressjs-puzzle-game-1to50-demo.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "javascript",
+    "puzzle",
+    "simple game"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "pug": "^3.0.2"
+  }
+}
