@@ -1,5 +1,7 @@
 This is a puzzle game `Quickness Test! 1 to 50` demo app
 
+DEMO: [one-to-fifty.abangkito.com](https://one-to-fifty.abangkito.com)
+
 REF: [zzzscore.com](https://zzzscore.com/1to50/en/)
 
 ## Getting Started
